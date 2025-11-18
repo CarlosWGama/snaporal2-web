@@ -1,0 +1,28 @@
+import { Metadata } from "next";
+import React from "react";
+import { AppMenu } from "@/themes/components";
+
+// ===============================================
+export const metadata: Metadata = {
+  title: 'Gerenciador Web',
+};
+// ===============================================
+
+export default function AdminLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
+  return (
+    <div className="bg-(--background-secondary) flex h-screen">
+        {/* MENU */}
+        <AppMenu />
+
+
+        {/* MAIN */}
+        <div className="flex flex-1 ml-[30px]">
+            {children}
+        </div>
+    </div>
+  );
+}
