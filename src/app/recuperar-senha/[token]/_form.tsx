@@ -4,14 +4,14 @@ import { useSearchParams } from 'next/navigation';
 import * as Yup from 'yup';
 import { AppInput, AppLoader } from '@/themes/components';
 import { AppButton } from '@/themes/components';
-import UserServices from '@/services/usuario';
+import UserServices from '@/services/user';
 import { useState } from 'react';
 
-export interface FormRecuperarSenhaProps {
+export interface FormRecoverPasswordProps {
     token: string;
 }
 
-export function FormRecuperarSenha({ token }: FormRecuperarSenhaProps) {
+export function FormRecoverPassword({ token }: FormRecoverPasswordProps) {
 
     const searchParams = useSearchParams();
     const email = searchParams.get('email');

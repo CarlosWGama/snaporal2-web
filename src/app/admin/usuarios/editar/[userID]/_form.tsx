@@ -1,25 +1,26 @@
 "use client";
-import { AppButton, AppInput, AppMainContainer, AppSelect } from "@/themes/components";
+import { AppButton, AppInput, AppLoader, AppMainContainer, AppSelect } from "@/themes/components";
 import { Formik } from "formik";
 import * as Yup from 'yup';
-import UsuarioServices from "@/services/usuario";
+import UserServices from "@/services/user";
 import { useRouter } from "next/navigation";
 import { setFlashData } from "@/helpers/router";
 import { useEffect, useState } from "react";
 
-export interface UsuarioFormProps {
-    usuarioID: number
+export interface UserFormProps {
+    userID: number
 }
 // ===========================================================================
-export default function UsuarioForm({ usuarioID }: UsuarioFormProps) {
+export default function UserForm({ userID }: UserFormProps) {
 
     const router = useRouter();
-    const [ usuario, setUsuario ] = useState({nome: '', email: '', password: '', admin: false, nivel_id: 1});
+    const [ user, setUser ] = useState({name: '', email: '', password: '', admin: false, role_id: 1});
+    const [ loading, setLoading ] = useState(true);
     const [ erro, setErro ] = useState<string|null>(null);
     // ===========================================================================
     const handleOnSubmit = async (data:any) => {
         setErro(null);
-        const { success, error } =  await UsuarioServices.update(data);
+        const { success, error } =  await UserServices.update(data);
         if (success) {
             setFlashData({success: 'Usuário editado com sucesso'});
             router.replace('/admin/usuarios');
@@ -30,9 +31,12 @@ export default function UsuarioForm({ usuarioID }: UsuarioFormProps) {
     // -----------------------
     useEffect(() => {
         (async() => {
-            const { success, usuario } = await UsuarioServices.getById(usuarioID);
-            if (success) setUsuario(usuario);
-            else {
+            const { success, user } = await UserServices.getById(userID);
+            console.log(success, user);
+            if (success) { 
+                setUser(user);
+                setLoading(false);
+            } else {
                 setFlashData({error: 'Usuário não encontrado'});
                 router.replace('/admin/usuarios');
             }
@@ -41,25 +45,28 @@ export default function UsuarioForm({ usuarioID }: UsuarioFormProps) {
     // ===========================================================================
     return (    
         <Formik
-            initialValues={usuario}
+            initialValues={user}
             enableReinitialize
             validationSchema={Yup.object({
-                nome: Yup.string().required('Campo obrigatório'),
+                name: Yup.string().required('Campo obrigatório'),
                 email: Yup.string().required('Campo obrigatório').email('Campo precisa ser um email'),
                 password: Yup.string().min(6, 'Campo precisa ter pelo menos 6 caracteres')
             })}
             onSubmit={handleOnSubmit}
             >
             {({handleChange, handleSubmit, isSubmitting, isValid, errors, values}) => (
+                <>
+                { loading && <div className="flex justify-center"><AppLoader size={50} className="self-center"/></div>}
+                { !loading &&
                 <form>
-                        <AppInput placeholder="Digite seu nome" label="Nome:" name="nome" onChange={handleChange} icon="person" error={errors.nome} value={values.nome} />
+                        <AppInput placeholder="Digite seu nome" label="Nome:" name="name" onChange={handleChange} icon="person" error={errors.name} value={values.name} />
                         <AppInput placeholder="Digite seu email" label="Email:" name="email" onChange={handleChange} icon="email" error={errors.email} value={values.email} />
                         <AppInput placeholder="Digite sua senha" label="Senha:" name="password" type="password" onChange={handleChange} icon="locked" openPassword  error={errors.password} />
                         <AppSelect label="Administrador:" onChange={handleChange} name="admin" value={values.admin ? '1' : '0'}>
                             <option value="1">Administrador</option>
                             <option value="0">Usuário</option>
                         </AppSelect>
-                        <AppSelect label="Tipo usuário:" onChange={handleChange} name="nivel_id" value={String(values.nivel_id)}>
+                        <AppSelect label="Tipo usuário:" onChange={handleChange} name="role_id" value={String(values.role_id)}>
                             <option value="1">Especialista</option>
                             <option value="2">Profissional</option>
                         </AppSelect>
@@ -67,7 +74,8 @@ export default function UsuarioForm({ usuarioID }: UsuarioFormProps) {
                         {erro && <p className="my-3 text-[tomato] text-[15px]">{erro}</p>}
                         <AppButton title="Editar" icon="checkmark" onClick={() => handleSubmit()} disabled={!isValid || isSubmitting}/>
 
-                </form>
+                </form>}
+                </>
             )}
         </Formik>
         

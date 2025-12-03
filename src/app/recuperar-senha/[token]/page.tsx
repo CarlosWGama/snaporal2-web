@@ -1,5 +1,5 @@
 import { Metadata } from "next";
-import { FormRecuperarSenha } from "./_form";
+import { FormRecoverPassword } from "./_form";
 
 export const metadata: Metadata = {
     title: 'Recuperar Senha',
@@ -15,7 +15,7 @@ export default function RecuperarSenhaPage({ params }: { params: { token: string
                     Recuperar Senha
                 </h2>
 
-                <FormRecuperarSenha token={token} />
+                <FormRecoverPassword token={token} />
             </div>
         </div>
     );

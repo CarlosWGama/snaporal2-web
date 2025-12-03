@@ -3,45 +3,45 @@ import { useEffect, useState } from "react"
 import Link from "next/link";
 import { AppButton, AppLoader, AppModal } from "@/themes/components";
 import { getFlashData } from "@/helpers/router";
-import { getDescricaoNivel } from "@/helpers/usuario";
-import UsuarioServices from "@/services/usuario";
+import { getRoleDescription } from "@/helpers/user";
+import UserServices from "@/services/user";
 
-export default function UsuarioList() {
+export default function UserList() {
 
-    const [ usuarios, setUsuarios ] = useState<any[]>([]);
-    const [ usuarioRemove, setUsuarioRemove ] = useState<any>(null);
+    const [ users, setUsers ] = useState<any[]>([]);
+    const [ userRemove, setUserRemove ] = useState<any>(null);
     const [ success, setSuccess ] = useState<string|null>(null);
     const [ error, setError ] = useState<string|null>(null);
     const [ loading, setLoading ] = useState(true);
     
     // ======================================================================
-    const getUsuarios = async () => {
-        const { success , usuarios } = await UsuarioServices.getAll();
-        if (success && usuarios) setUsuarios(usuarios);
+    const getUsers = async () => {
+        const { success , users } = await UserServices.getAll();
+        if (success && users) setUsers(users);
         setLoading(false);
     }
     // -----------
-    const handleRemove = async (usuario: any) => {
-        setUsuarioRemove(usuario);
+    const handleRemove = async (user: any) => {
+        setUserRemove(user);
         setSuccess(null);
         setError(null);
     }
     // -----------
     const handleModalConfirm = async () => {
-        setUsuarioRemove(null);
+        setUserRemove(null);
         setLoading(true);
-        await UsuarioServices.delete(usuarioRemove.id);
-        await getUsuarios();
+        await UserServices.delete(userRemove.id);
+        await getUsers();
         setSuccess('Usuário excluido com sucesso!');
     }
     // -----------
     const handleModalCancel = async () => {
-        setUsuarioRemove(null);
+        setUserRemove(null);
     }
     // -----------
     useEffect(() => {
         //Recupera usuário
-        getUsuarios();
+        getUsers();
         //Recupera mensagem 
         (() => {
             const data = getFlashData();
@@ -72,18 +72,18 @@ export default function UsuarioList() {
 
                     {/* DADOS */}
                     <tbody>
-                        {usuarios.map(usuario => (
-                            <tr key={usuario.id}>
-                                <td className="py-2 px-4 border-b border-gray-200 text-sm">{usuario.nome}</td>
-                                <td className="py-2 px-4 border-b border-gray-200 text-sm">{usuario.email}</td>
-                                <td className="py-2 px-4 border-b border-gray-200 text-sm">{getDescricaoNivel(usuario.nivel_id)}</td>
-                                <td className="py-2 px-4 border-b border-gray-200 text-sm">{usuario.admin ? 'SIM' : 'NÃO'}</td>
+                        {users.map(user => (
+                            <tr key={user.id}>
+                                <td className="py-2 px-4 border-b border-gray-200 text-sm">{user.name}</td>
+                                <td className="py-2 px-4 border-b border-gray-200 text-sm">{user.email}</td>
+                                <td className="py-2 px-4 border-b border-gray-200 text-sm">{getRoleDescription(user.role_id)}</td>
+                                <td className="py-2 px-4 border-b border-gray-200 text-sm">{user.admin ? 'SIM' : 'NÃO'}</td>
                                 
                                 <td className="py-2 px-4 border-b border-gray-200 text-sm">
-                                    <Link href={`/admin/usuarios/editar/${usuario.id}`}>
+                                    <Link href={`/admin/usuarios/editar/${user.id}`}>
                                         <i className="ion-edit text-[20px] text-[#1aab67] mx-[10px] cursor-pointer" />
                                     </Link>
-                                    <i className="ion-ios-trash text-[20px] text-[#ed1b2d]  mx-[10px] cursor-pointer" onClick={() => handleRemove(usuario)} />
+                                    <i className="ion-ios-trash text-[20px] text-[#ed1b2d]  mx-[10px] cursor-pointer" onClick={() => handleRemove(user)} />
                                 </td>
                             </tr>
                         ))}
@@ -91,8 +91,8 @@ export default function UsuarioList() {
                 </table>
             </div>}
 
-            {usuarioRemove && <AppModal title="Remover usuário">
-                <p>Deseja realmente remover o usuário {usuarioRemove.name} ({usuarioRemove.email})?</p>
+            {userRemove && <AppModal title="Remover usuário">
+                <p>Deseja realmente remover o usuário {userRemove.name} ({userRemove.email})?</p>
                 <div className="flex justify-between p-[20px]">
                     <AppButton title="Sim" icon="checkmark" form="round" color="#428f01" onClick={handleModalConfirm}/>
                     <AppButton title="Cancelar" icon="close" color="tomato" form="round" onClick={handleModalCancel}/>

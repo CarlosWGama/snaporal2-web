@@ -1,19 +1,19 @@
 import { AppMainContainer } from "@/themes/components";
-import UsuarioForm from "./_form";
+import UserForm from "./_form";
 
 export const metadata = {
     title: 'Editar usuário'
 }
 
 // ===========================================================================
-export default async function UsuariosEditarPage({params}: any) {
+export default async function UsersEditarPage({params}: any) {
 
-    const { usuarioID } = await params;
+    const { userID } = await params;
     
     // ===========================================================================
     return (
         <AppMainContainer title="Editar usuário">
-            <UsuarioForm usuarioID={usuarioID}/>
+            <UserForm userID={userID}/>
         </AppMainContainer>
     )
 }

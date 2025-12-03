@@ -1,7 +1,7 @@
 "use client";
 import { useRouter } from "next/navigation";
 import AppMenuItem from "./menu-item";
-import UserServices from "@/services/usuario";
+import UserServices from "@/services/user";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 

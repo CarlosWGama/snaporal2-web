@@ -4,7 +4,7 @@ import { Formik } from "formik";
 import Image from "next/image";
 import { useState } from "react";
 import * as Yup from 'yup';
-import UserServices from "@/services/usuario";
+import UserServices from "@/services/user";
 import { useRouter } from "next/navigation";
 
 export default function LoginForm() {

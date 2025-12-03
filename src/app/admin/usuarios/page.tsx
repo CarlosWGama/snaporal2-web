@@ -5,7 +5,7 @@ export const metadata = {
     title:'Lista de usuários'
 }
 // ==========================================================
-export default function UsuariosPage() {  
+export default function UsersPage() {  
 
     // ==========================================================
     return (

@@ -4,7 +4,7 @@ import api from './api';
 /**
  * SERVICES DE GERENCIAMENTO DE USUÁRIOS
  */
-const UsuarioServices = {
+const UserServices = {
 
     /**
      * Autenticação de usuário
@@ -12,14 +12,14 @@ const UsuarioServices = {
     login: async (email: string, password: string): Promise<{ success: boolean, message?: string }> => {
 
         try {
-            const response = await api.post('/usuarios/login', { email, password });
-            const { token, usuario } = response.data;
-            if (!usuario.admin) {
-                await UsuarioServices.logout();
+            const response = await api.post('/users/login', { email, password });
+            const { token, user } = response.data;
+            if (!user.admin) {
+                await UserServices.logout();
                 return { success: false, message: 'Usuário não autorizado' };
             }
             Cookies.set('token', token);
-            Cookies.set('usuario', JSON.stringify(usuario));
+            Cookies.set('user', JSON.stringify(user));
             return { success: true }
         } catch (erro: any) {
             console.log(erro);
@@ -32,8 +32,8 @@ const UsuarioServices = {
      * @returns 
      */
     getCurrentUser: () => {
-        const usuario = Cookies.get('usuario');
-        return usuario ? JSON.parse(usuario) : null;
+        const user = Cookies.get('user');
+        return user ? JSON.parse(user) : null;
     },
 
     /**
@@ -41,7 +41,7 @@ const UsuarioServices = {
      */
     resetPassword: async (email: string): Promise<{ success: boolean }> => {
         try {
-            await api.post('/usuarios/reset-password', { email });
+            await api.post('/users/recover-password', { email });
             return { success: true };
         } catch (error) {
             return { success: false };
@@ -54,7 +54,7 @@ const UsuarioServices = {
      */
     updatePassword: async (token: string, password: string): Promise<{ success: boolean }> => {
         try {
-            await api.put(`/usuarios/recuperar-senha/${token}`, { password });
+            await api.put(`/users/recover-password/${token}`, { password });
             return { success: true };
         } catch (error) {
             return { success: false };
@@ -67,8 +67,8 @@ const UsuarioServices = {
     logout: async (): Promise<{ success: boolean }> => {
         //Simula um atrasado de 1seg
         try {
-            await api.get('/usuarios/logout');
-            Cookies.remove('usuario');
+            await api.get('/users/logout');
+            Cookies.remove('user');
             return { success: true };
         } catch (erro) {
             return { success: false };
@@ -79,10 +79,10 @@ const UsuarioServices = {
      * Retorna todos os usuários do sistema
      * @returns 
      */
-    getAll: async (): Promise<{ success: boolean, usuarios?: any[] }> => {
+    getAll: async (): Promise<{ success: boolean, users?: any[] }> => {
         try {
-            const response = await api.get('/usuarios');
-            return { success: true, usuarios: response.data };
+            const response = await api.get('/users');
+            return { success: true, users: response.data };
         } catch (error) {
             return { success: false };
         }
@@ -92,23 +92,24 @@ const UsuarioServices = {
      * Retorna dados de um unico usuário
      * @returns 
      */
-    getById: async (id: number): Promise<{ success: boolean, usuario: any }> => {
+    getById: async (id: number): Promise<{ success: boolean, user: any }> => {
         try {
-            const response = await api.get(`/usuarios/${id}`);
-            return { success: true, usuario: response.data };
+            const response = await api.get(`/users/${id}`);
+            console.log(response);
+            return { success: true, user: response.data };
         } catch (erro) {
-            return { success: false, usuario: null };
+            return { success: false, user: null };
         }
     },
 
     /**
      * Cria um usuário
-     * @param usuario 
+     * @param user 
      * @returns 
      */
-    create: async (usuario: any): Promise<{ success: boolean, error?: string }> => {
+    create: async (user: any): Promise<{ success: boolean, error?: string }> => {
         try {
-            await api.post(`/usuarios`, usuario);
+            await api.post(`/users`, user);
             return { success: true };
         } catch (erro: any) {
             const mensagem = erro.response.data.join('\n');
@@ -118,12 +119,12 @@ const UsuarioServices = {
 
     /**
      * Atualiza um usuário
-     * @param usuario 
+     * @param user 
      * @returns 
      */
-    update: async (usuario: any): Promise<{ success: boolean, error?: string }> => {
+    update: async (user: any): Promise<{ success: boolean, error?: string }> => {
         try {
-            await api.put(`/usuarios/${usuario.id}`, usuario);
+            await api.put(`/users/${user.id}`, user);
             return { success: true };
         } catch (erro: any) {
             const mensagem = erro.response.data.join('\n');
@@ -133,12 +134,12 @@ const UsuarioServices = {
 
     /**
      * Remove um usuário
-     * @param usuario 
+     * @param user 
      * @returns 
      */
     delete: async (id: number): Promise<{ success: boolean }> => {
         try {
-            await api.delete(`/usuarios/${id}`);
+            await api.delete(`/users/${id}`);
             return { success: true };
         } catch (erro: any) {
             return { success: false };
@@ -148,4 +149,4 @@ const UsuarioServices = {
 
 }
 
-export default UsuarioServices;
+export default UserServices;

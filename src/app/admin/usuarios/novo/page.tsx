@@ -1,17 +1,17 @@
 import { AppMainContainer } from "@/themes/components";
-import UsuarioForm from "./_form";
+import UserForm from "./_form";
 
 export const metadata = {
     title: 'Cadastrar usuário'
 }
 
 // ===========================================================================
-export default function UsuariosNovoPage() {
+export default function UsersNovoPage() {
 
     // ===========================================================================
     return (
         <AppMainContainer title="Novo usuário">
-            <UsuarioForm/>
+            <UserForm/>
         </AppMainContainer>
     )
 }
