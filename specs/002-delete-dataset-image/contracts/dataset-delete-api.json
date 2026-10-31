@@ -1,0 +1,55 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "DatasetDeleteEndpointContract",
+  "type": "object",
+  "properties": {
+    "method": {
+      "type": "string",
+      "enum": ["DELETE"]
+    },
+    "path": {
+      "type": "string",
+      "pattern": "^/dataset/[0-9]+$"
+    },
+    "headers": {
+      "type": "object",
+      "properties": {
+        "Authorization": {
+          "type": "string",
+          "pattern": "^Bearer .+$"
+        }
+      },
+      "required": ["Authorization"]
+    },
+    "responses": {
+      "type": "object",
+      "properties": {
+        "200": {
+          "type": "object",
+          "properties": {
+            "success": { "type": "boolean" },
+            "message": { "type": "string" }
+          }
+        },
+        "204": {
+          "type": "null"
+        },
+        "401": {
+          "type": "object",
+          "properties": {
+            "message": { "type": "string" }
+          },
+          "required": ["message"]
+        },
+        "404": {
+          "type": "object",
+          "properties": {
+            "message": { "type": "string" }
+          },
+          "required": ["message"]
+        }
+      }
+    }
+  },
+  "required": ["method", "path", "headers"]
+}

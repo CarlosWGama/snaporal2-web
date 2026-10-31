@@ -10,6 +10,10 @@ export default function DatasetList() {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [selectedImage, setSelectedImage] = useState<DatasetItem | null>(null);
+  const [itemToDelete, setItemToDelete] = useState<DatasetItem | null>(null);
+  const [isDeleting, setIsDeleting] = useState<boolean>(false);
+  const [deleteError, setDeleteError] = useState<string | null>(null);
+  const [feedbackMessage, setFeedbackMessage] = useState<string | null>(null);
   const [filter, setFilter] = useState<{
     name: string;
     email: string;
@@ -67,42 +71,59 @@ export default function DatasetList() {
   };
 
   // ----------------------------------------------------------------------
-  // DOWNLOAD DA IMAGEM
-  // ----------------------------------------------------------------------
-  const handleDownload = async (item: DatasetItem) => {
-    try {
-      const response = await fetch(item.image_url);
-      if (!response.ok) throw new Error("Falha ao obter imagem");
-
-      const blob = await response.blob();
-      const url = window.URL.createObjectURL(blob);
-      const link = document.createElement("a");
-      link.href = url;
-
-      // Extrai ou gera um nome amigável para o arquivo
-      const urlParts = item.image_url.split("/");
-      const fileName = urlParts[urlParts.length - 1] || `imagem_${item.type}_${Date.now()}.jpg`;
-      link.download = fileName;
-
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      window.URL.revokeObjectURL(url);
-    } catch {
-      // Fallback: abrir a URL diretamente para download do navegador
-      const link = document.createElement("a");
-      link.href = item.image_url;
-      link.target = "_blank";
-      link.download = `imagem_${item.type}.jpg`;
-      link.click();
-    }
-  };
-
-  // ----------------------------------------------------------------------
   useEffect(() => {
     loadDataset(1);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  // ----------------------------------------------------------------------
+  // DOWNLOAD DA IMAGEM
+  // ----------------------------------------------------------------------
+  const handleDownload = (item: DatasetItem) => {
+    window.open(item.image_url, '_blank')?.focus();
+  };
+
+  // ----------------------------------------------------------------------
+  // CONFIRMAÇÃO E EXECUÇÃO DA REMOÇÃO
+  // ----------------------------------------------------------------------
+  const handleConfirmDelete = async () => {
+    if (!itemToDelete) return;
+
+    setIsDeleting(true);
+    setDeleteError(null);
+
+    const response = await DatasetServices.delete(itemToDelete.id);
+
+    if (response.success) {
+      setItemToDelete(null);
+      setFeedbackMessage("Imagem removida com sucesso do dataset.");
+      setTimeout(() => {
+        setFeedbackMessage(null);
+      }, 4000);
+
+      // Se estiver em página > 1 e for o único item restante da página, recua para a anterior
+      if (page > 1 && items.length === 1) {
+        const prevPage = page - 1;
+        setPage(prevPage);
+        loadDataset(prevPage);
+      } else {
+        loadDataset(page);
+      }
+    } else {
+      setDeleteError(response.error || "Falha ao excluir imagem do dataset.");
+    }
+
+    setIsDeleting(false);
+  };
+
+  // ----------------------------------------------------------------------
+  // CANCELAMENTO DA REMOÇÃO
+  // ----------------------------------------------------------------------
+  const handleCancelDelete = () => {
+    if (isDeleting) return;
+    setItemToDelete(null);
+    setDeleteError(null);
+  };
 
   // ======================================================================
   return (
@@ -158,6 +179,20 @@ export default function DatasetList() {
           />
         </div>
       </div>
+
+      {/* FEEDBACK DE SUCESSO */}
+      {feedbackMessage && (
+        <div className="bg-[#1aab67] text-white px-5 text-center rounded-full p-2 my-3 font-medium flex justify-between items-center text-sm shadow-sm">
+          <span className="mx-auto">{feedbackMessage}</span>
+          <button
+            type="button"
+            onClick={() => setFeedbackMessage(null)}
+            className="text-white font-bold ml-2 focus:outline-none cursor-pointer"
+          >
+            &times;
+          </button>
+        </div>
+      )}
 
       {/* FEEDBACK DE ERRO */}
       {error && (
@@ -283,17 +318,32 @@ export default function DatasetList() {
                           )}
                         </td>
 
-                        {/* AÇÕES / DOWNLOAD */}
+                        {/* AÇÕES / DOWNLOAD E REMOVER */}
                         <td className="py-3 px-4 border-b border-gray-200 text-center text-sm">
-                          <button
-                            type="button"
-                            title="Baixar imagem"
-                            onClick={() => handleDownload(item)}
-                            className="bg-[#111828] hover:bg-[#1f2937] text-white px-3 py-1.5 rounded-full text-xs flex items-center gap-1 mx-auto transition-colors cursor-pointer"
-                          >
-                            <i className="ion-android-download text-[14px]" />
-                            <span>Baixar</span>
-                          </button>
+                          <div className="flex items-center justify-center gap-2">
+                            <button
+                              type="button"
+                              title="Abrir imagem"
+                              onClick={() => handleDownload(item)}
+                              className="bg-[#111828] hover:bg-[#1f2937] text-white px-3 py-1.5 rounded-full text-xs flex items-center gap-1 transition-colors cursor-pointer"
+                            >
+                              <i className="ion-android-download text-[14px]" />
+                              <span>Baixar</span>
+                            </button>
+
+                            <button
+                              type="button"
+                              title="Remover imagem"
+                              onClick={() => {
+                                setDeleteError(null);
+                                setItemToDelete(item);
+                              }}
+                              className="bg-[#dc2626] hover:bg-[#b91c1c] text-white px-3 py-1.5 rounded-full text-xs flex items-center gap-1 transition-colors cursor-pointer"
+                            >
+                              <i className="ion-trash-a text-[14px]" />
+                              <span>Remover</span>
+                            </button>
+                          </div>
                         </td>
                       </tr>
                     );
@@ -382,6 +432,55 @@ export default function DatasetList() {
                 form="round"
                 color="tomato"
                 onClick={() => setSelectedImage(null)}
+              />
+            </div>
+          </div>
+        </AppModal>
+      )}
+
+      {/* MODAL DE CONFIRMAÇÃO DE REMOÇÃO */}
+      {itemToDelete && (
+        <AppModal
+          title="Confirmar Remoção"
+          onClose={handleCancelDelete}
+        >
+          <div className="flex flex-col items-center max-w-[480px]">
+            <div className="w-12 h-12 rounded-full bg-red-100 flex items-center justify-center mb-4 text-[#dc2626]">
+              <i className="ion-trash-a text-[24px]" />
+            </div>
+
+            <p className="text-center text-gray-700 text-base leading-relaxed mb-6 font-medium">
+              Você realmente quer remover essa imagem? Ao confirmar a remoção da imagem, ela será excluída e não poderá mais ser recuperada.
+            </p>
+
+            {deleteError && (
+              <div className="w-full bg-red-50 border border-red-200 text-red-700 px-4 py-2.5 rounded-lg text-sm mb-4 text-center">
+                {deleteError}
+              </div>
+            )}
+
+            {isDeleting && (
+              <div className="mb-4">
+                <AppLoader />
+              </div>
+            )}
+
+            <div className="flex justify-between w-full gap-4 mt-2">
+              <AppButton
+                title="Cancelar"
+                icon="close"
+                form="round"
+                color="#6b7280"
+                disabled={isDeleting}
+                onClick={handleCancelDelete}
+              />
+              <AppButton
+                title={isDeleting ? "Removendo..." : "Confirmar Remoção"}
+                icon="trash-a"
+                form="round"
+                color="#dc2626"
+                disabled={isDeleting}
+                onClick={handleConfirmDelete}
               />
             </div>
           </div>

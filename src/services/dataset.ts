@@ -8,6 +8,7 @@ export interface DatasetUser {
 export type DatasetPathologyType = 'cancer' | 'qa' | 'eritroplasia' | 'leucoplasia';
 
 export interface DatasetItem {
+  id: number;
   image_url: string;
   type: string;
   positive: boolean;
@@ -25,6 +26,11 @@ export interface DatasetFilter {
 export interface DatasetResponse {
   success: boolean;
   data?: DatasetItem[];
+  error?: string;
+}
+
+export interface DatasetDeleteResponse {
+  success: boolean;
   error?: string;
 }
 
@@ -65,6 +71,31 @@ const DatasetServices = {
     } catch (error: unknown) {
       console.error('Erro ao buscar dataset:', error);
       let message = 'Falha ao carregar imagens do dataset.';
+      if (typeof error === 'object' && error !== null && 'response' in error) {
+        const resp = (error as { response?: { data?: { message?: string } } }).response;
+        if (resp?.data?.message) {
+          message = resp.data.message;
+        }
+      }
+      return {
+        success: false,
+        error: message,
+      };
+    }
+  },
+
+  /**
+   * Remove uma imagem cadastrada do dataset pelo seu identificador
+   */
+  delete: async (id: number): Promise<DatasetDeleteResponse> => {
+    try {
+      await api.delete(`/dataset/${id}`);
+      return {
+        success: true,
+      };
+    } catch (error: unknown) {
+      console.error('Erro ao excluir imagem do dataset:', error);
+      let message = 'Falha ao excluir imagem do dataset.';
       if (typeof error === 'object' && error !== null && 'response' in error) {
         const resp = (error as { response?: { data?: { message?: string } } }).response;
         if (resp?.data?.message) {
