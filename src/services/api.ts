@@ -14,7 +14,7 @@ api.interceptors.request.use(
 
 
     console.log('Starting Request:', {
-      method: config.method.toUpperCase(),
+      method: config.method?.toUpperCase() || '',
       url: config.url,
       baseURL: config.baseURL,
       data: config.data, // For POST/PUT requests

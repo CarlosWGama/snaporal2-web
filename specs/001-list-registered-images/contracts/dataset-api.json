@@ -1,0 +1,57 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "DatasetItemsResponse",
+  "description": "Contrato de retorno do endpoint GET /dataset",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "required": [
+      "image_url",
+      "type",
+      "positive",
+      "assurance",
+      "created_at",
+      "user"
+    ],
+    "properties": {
+      "image_url": {
+        "type": "string",
+        "format": "uri",
+        "description": "URL da imagem cadastrada no servidor de arquivos"
+      },
+      "type": {
+        "type": "string",
+        "description": "Tipo de lesão/diagnóstico (ex: câncer, qa, eritroplasia, leucoplasia)"
+      },
+      "positive": {
+        "type": "boolean",
+        "description": "Indicação se a classificação é positiva ou negativa"
+      },
+      "assurance": {
+        "type": "number",
+        "minimum": 0,
+        "maximum": 100,
+        "description": "Índice de confiança da predição em formato percentual"
+      },
+      "created_at": {
+        "type": "string",
+        "description": "Data e hora de envio do exame"
+      },
+      "user": {
+        "type": "object",
+        "required": ["name", "email"],
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Nome completo do usuário"
+          },
+          "email": {
+            "type": "string",
+            "format": "email",
+            "description": "E-mail de contato do usuário"
+          }
+        }
+      }
+    }
+  }
+}

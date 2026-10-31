@@ -37,6 +37,7 @@ export default function AppMenu() {
                 <AppMenuItem title="Usuários" icon="ios-people" url="/admin/usuarios" />
                 <AppMenuItem title="Consultas" icon="calendar" url="/admin/consultas" />
                 <AppMenuItem title="Pacientes" icon="clipboard" url="/admin/pacientes" />
+                <AppMenuItem title="Dataset" icon="images" url="/admin/dataset" />
             </div>
 
             {/* LOGOUT */}

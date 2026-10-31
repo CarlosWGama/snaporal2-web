@@ -31,6 +31,19 @@ Sempre que precisar criar uma estrutura de uma view, criar ela dentro da pasta a
       page.tsx        -> Layout da página (Sempre usar o nome page.tsx)
       _nome-component.tsx  -> Componente que faz parte da página
 ```
+---
+
+Ao adicionar um novo modulo no admin, também adicione no componente `/src/themes/components/menu.tsx` um link apontando para acessar a tela inicial do componente, como no exemplo abaixo:
+```tsx
+{/* OPÇÕES */}
+<div className="pl-[30px] mt-[30px] flex-1">
+    <AppMenuItem title="Dashboard" icon="grid" url="/admin/dashboard" />
+    <AppMenuItem title="Usuários" icon="ios-people" url="/admin/usuarios" />
+    <AppMenuItem title="Consultas" icon="calendar" url="/admin/consultas" />
+    <AppMenuItem title="Pacientes" icon="clipboard" url="/admin/pacientes" />
+    <AppMenuItem title="{NOVO MODULO}" icon="clipboard" url="/admin/{novo-modulo}" />
+</div>
+```
 
 ### Temas
 As informações e componentes que são compartilhado entre várias telas, precisam estar dentro da pasta /src/app/themes/components
