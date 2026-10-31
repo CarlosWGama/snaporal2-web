@@ -1,0 +1,11 @@
+{
+  "version": 1,
+  "skills": {
+    "nextjs-app-router-fundamentals": {
+      "source": "wsimmonds/claude-nextjs-skills",
+      "sourceType": "github",
+      "skillPath": "nextjs-app-router-fundamentals/SKILL.md",
+      "computedHash": "7db69d3b4cdc7e880b667b7173146f3ff8b8fb096aace7f2e7f47ec4bac3ee79"
+    }
+  }
+}

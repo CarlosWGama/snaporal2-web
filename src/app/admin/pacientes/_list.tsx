@@ -101,14 +101,14 @@ export default function PatientsList() {
             {!loading && <div className="overflow-x-auto">
                 <table className="min-w-full bg-white">
                     {/* HEADER  */}
-                    <thead>
+                    <thead className="bg-[#111828]">
                         <tr>
-                            <th className="py-2 px-4 border-b border-gray-200 text-left text-sm font-semibold text-gray-600">Nome</th>
-                            <th className="py-2 px-4 border-b border-gray-200 text-left text-sm font-semibold text-gray-600">Gênero</th>
-                            <th className="py-2 px-4 border-b border-gray-200 text-left text-sm font-semibold text-gray-600">Data de Nascimento</th>
-                            <th className="py-2 px-4 border-b border-gray-200 text-left text-sm font-semibold text-gray-600">Criado por</th>
-                            <th className="py-2 px-4 border-b border-gray-200 text-left text-sm font-semibold text-gray-600">Editado por</th>
-                            <th className="py-2 px-4 border-b border-gray-200 text-left text-sm font-semibold text-gray-600">Ações</th>
+                            <th className="py-5 px-4 border-b border-gray-200 text-left text-sm font-semibold text-white">Nome</th>
+                            <th className="py-5 px-4 border-b border-gray-200 text-left text-sm font-semibold text-white">Gênero</th>
+                            <th className="py-5 px-4 border-b border-gray-200 text-left text-sm font-semibold text-white">Data de Nascimento</th>
+                            <th className="py-5 px-4 border-b border-gray-200 text-left text-sm font-semibold text-white">Criado por</th>
+                            <th className="py-5 px-4 border-b border-gray-200 text-left text-sm font-semibold text-white">Editado por</th>
+                            <th className="py-5 px-4 border-b border-gray-200 text-left text-sm font-semibold text-white">Ações</th>
                         </tr>
                     </thead>
 

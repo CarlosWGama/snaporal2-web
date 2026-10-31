@@ -104,13 +104,13 @@ export default function ConsultationList() {
             {!loading && <div className="overflow-x-auto">
                 <table className="min-w-full bg-white">
                     {/* HEADER  */}
-                    <thead>
+                    <thead className="bg-[#111828]">
                         <tr>
-                            <th className="py-2 px-4 border-b border-gray-200 text-left text-sm font-semibold text-gray-600">Especialista</th>
-                            <th className="py-2 px-4 border-b border-gray-200 text-left text-sm font-semibold text-gray-600">Profissional</th>
-                            <th className="py-2 px-4 border-b border-gray-200 text-left text-sm font-semibold text-gray-600">Data</th>
-                            <th className="py-2 px-4 border-b border-gray-200 text-left text-sm font-semibold text-gray-600">Status</th>
-                            <th className="py-2 px-4 border-b border-gray-200 text-left text-sm font-semibold text-gray-600">Ações</th>
+                            <th className="py-5 px-4 border-b border-gray-200 text-left text-sm font-semibold text-white">Especialista</th>
+                            <th className="py-5 px-4 border-b border-gray-200 text-left text-sm font-semibold text-white">Profissional</th>
+                            <th className="py-5 px-4 border-b border-gray-200 text-left text-sm font-semibold text-white">Data</th>
+                            <th className="py-5 px-4 border-b border-gray-200 text-left text-sm font-semibold text-white">Status</th>
+                            <th className="py-5 px-4 border-b border-gray-200 text-left text-sm font-semibold text-white">Ações</th>
                         </tr>
                     </thead>
 

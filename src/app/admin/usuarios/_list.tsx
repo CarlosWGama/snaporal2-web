@@ -110,13 +110,13 @@ export default function UserList() {
             {!loading && <div className="overflow-x-auto">
                 <table className="min-w-full bg-white">
                     {/* HEADER  */}
-                    <thead>
+                    <thead className="bg-[#111828]">
                         <tr>
-                            <th className="py-2 px-4 border-b border-gray-200 text-left text-sm font-semibold text-gray-600">Nome</th>
-                            <th className="py-2 px-4 border-b border-gray-200 text-left text-sm font-semibold text-gray-600">Email</th>
-                            <th className="py-2 px-4 border-b border-gray-200 text-left text-sm font-semibold text-gray-600">Função</th>
-                            <th className="py-2 px-4 border-b border-gray-200 text-left text-sm font-semibold text-gray-600">Admin</th>
-                            <th className="py-2 px-4 border-b border-gray-200 text-left text-sm font-semibold text-gray-600">Ações</th>
+                            <th className="py-5 px-4 border-b border-gray-200 text-left text-sm font-semibold text-white">Nome</th>
+                            <th className="py-5 px-4 border-b border-gray-200 text-left text-sm font-semibold text-white">Email</th>
+                            <th className="py-5 px-4 border-b border-gray-200 text-left text-sm font-semibold text-white">Função</th>
+                            <th className="py-5 px-4 border-b border-gray-200 text-left text-sm font-semibold text-white">Admin</th>
+                            <th className="py-5 px-4 border-b border-gray-200 text-left text-sm font-semibold text-white">Ações</th>
                         </tr>
                     </thead>
 

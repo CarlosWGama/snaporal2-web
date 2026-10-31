@@ -12,7 +12,7 @@ export default function Page() {
     return (<div className="flex h-screen">
         {/* ESQUERDA */}
         <div className="flex-1 justify-center items-center bg-(--background-secondary) hidden lg:flex">
-            <Image src="/assets/img/logo-login.png" alt="logo-login" width={580} height={600}/>
+            <Image src="/assets/img/logo.png" alt="logo-login" width={300} height={300}/>
         </div>
 
         {/* DIREITA */}

@@ -5,7 +5,7 @@
   /* CORES */
   --background-primary: #ffffff;
   --background-secondary: #f2f3f0;
-  --primary-color: #0069ad;
+  --primary-color: #ec3037;
 }
 
 .ff-default {
@@ -18,7 +18,7 @@
 .loader {
   border: 16px solid #f3f3f3;
   border-radius: 50%;
-  border-top: 16px solid #3498db;
+  border-top: 16px solid #ec3037;
   width: 120px;
   height: 120px;
   -webkit-animation: spin 2s linear infinite; /* Safari */
